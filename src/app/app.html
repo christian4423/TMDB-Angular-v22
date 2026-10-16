@@ -1,6 +1,6 @@
-<nav>
-  <a routerLink="" routerLinkActive="active">Watchlist 🍿</a>
-  <a routerLink="search" routerLinkActive="active">Search 🔍</a>
+<nav aria-label="Main">
+  <a routerLink="" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Watchlist <span aria-hidden="true">🍿</span></a>
+  <a routerLink="search" routerLinkActive="active">Search <span aria-hidden="true">🔍</span></a>
 </nav>
 
 <router-outlet />

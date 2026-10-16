@@ -1,7 +1,7 @@
 import { Injectable, inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../environments/environment";
-import { TmdbMovie } from "./movie";
+import { TmdbMovie, TmdbMovieDetail } from "./movie";
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +15,6 @@ export class MovieService {
     }
 
     getMovie(id: number) {
-        return this.http.get<TmdbMovie>(`${this.base}/movie/${id}?api_key=${environment.tmdb}`);
+        return this.http.get<TmdbMovieDetail>(`${this.base}/movie/${id}?api_key=${environment.tmdb}&append_to_response=credits`);
     }
 }

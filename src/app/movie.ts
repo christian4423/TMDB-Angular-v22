@@ -10,6 +10,33 @@ export interface TmdbMovie {
     id: number;
     title: string;
     release_date: string;
-    poster_path: number | null;
+    poster_path: string | null;
     overview: string;
+}
+
+export interface TmdbGenre {
+    id: number;
+    name: string;
+}
+
+export interface TmdbCastMember {
+    id: number;
+    name: string;
+    character: string;
+    profile_path: string | null;
+}
+
+export interface TmdbMovieDetail extends TmdbMovie {
+    tagline: string;
+    backdrop_path: string | null;
+    runtime: number | null;
+    vote_average: number;
+    vote_count: number;
+    genres: TmdbGenre[];
+    status: string;
+    original_language: string;
+    budget: number;
+    revenue: number;
+    homepage: string;
+    credits?: { cast: TmdbCastMember[] };
 }

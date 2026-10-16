@@ -18,8 +18,12 @@ export class Watchlist {
   watchedCount = computed(() => this.movies().filter(movie => movie.watched).length)
 
   toggleWatched(event: KeyboardEvent | MouseEvent, id: number) {
-    if (event instanceof KeyboardEvent && event.key !== 'Enter') {
-      return;
+    if (event instanceof KeyboardEvent) {
+      if (event.key !== 'Enter' && event.key !== ' ') {
+        return;
+      }
+      // Stop Space from scrolling the page
+      event.preventDefault();
     }
     this.movies.update(movies => 
       movies.map(movie => movie.id === id ? {...movie, watched: !movie.watched} : movie)

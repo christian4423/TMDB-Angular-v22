@@ -1,59 +1,82 @@
-# Watchlist
+# TMDB Watchlist (Angular 22)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.2.
+A small movie watchlist app built on [The Movie Database (TMDB) API](https://developer.themoviedb.org/). It's a portfolio project to show modern Angular patterns, and it's still being built in phases (see [Roadmap](#roadmap)).
 
-## Development server
+## Features
 
-To start a local development server, run:
+- **Watchlist**: track movies and mark them as watched. A live count of watched movies is computed from the list.
+- **Search / Trending**: browse this week's trending movies from TMDB.
+- **Movie details**: poster, backdrop, tagline, runtime, rating, genres, budget/revenue, original language, and the top-billed cast. TMDB's `append_to_response` returns the credits in the same request as the details.
 
-```bash
-ng serve
-```
+## Angular concepts used
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+| Concept | Where |
+| --- | --- |
+| Standalone components (no NgModules) | All components |
+| Signals: `signal`, `computed`, `update` | [watchlist.ts](src/app/watchlist/watchlist.ts), [movie-detail.ts](src/app/movie-detail/movie-detail.ts) |
+| RxJS ↔ signals with `toSignal` | [search.ts](src/app/search/search.ts), [movie-detail.ts](src/app/movie-detail/movie-detail.ts) |
+| Route params → HTTP with `switchMap` (cancels stale requests) | [movie-detail.ts](src/app/movie-detail/movie-detail.ts) |
+| Lazy-loaded routes via `loadComponent` | [app.routes.ts](src/app/app.routes.ts) |
+| Built-in control flow (`@if`, `@for`, `@else`) | All templates |
+| `inject()` function-based DI | Components and [movie.service.ts](src/app/movie.service.ts) |
+| Typed `HttpClient` service, `providedIn: 'root'` | [movie.service.ts](src/app/movie.service.ts) |
+| Built-in pipes (`number`, `currency`) | [movie-detail.html](src/app/movie-detail/movie-detail.html) |
+| Loading / error states without extra flags (`undefined` = loading, `null` = error) | [movie-detail.ts](src/app/movie-detail/movie-detail.ts) |
+| Unit tests with Vitest, mocked DI providers, and keyboard interaction tests | `*.spec.ts` next to each component |
 
-## Code scaffolding
+## Accessibility
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- Each watchlist item is a custom checkbox (`role="checkbox"` with `aria-checked`) that's labelled with the movie title. You can tab to it and toggle it with **Enter**, **Space**, or a click. Unit tests cover the keyboard behavior.
+- The movie details page uses semantic landmarks: an `article` and labelled `section`s with a proper heading order (`h1` → `h2`).
+- Facts use lists, and details use a description list (`dl`), so screen readers announce them as structured data.
+- The poster has descriptive `alt` text. Cast photos and the backdrop are decorative, so they have an empty `alt` or `aria-hidden`.
+- Emoji used as decoration are hidden from assistive tech.
+- Loading uses `role="status"` and errors use `role="alert"`, so both are announced.
+- External links say "(opens in a new tab)" with visually hidden text.
+- Links and watchlist items have a visible `:focus-visible` outline.
 
-```bash
-ng generate component component-name
-```
+## Getting started
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+**Prerequisites:** Node.js 22.22+, 24.15+, or 26+ and a free [TMDB API key](https://www.themoviedb.org/settings/api).
 
 ```bash
-ng e2e
+npm install
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+The development API key file is git-ignored, so you need to create it yourself at `src/environments/environment.development.ts`:
 
-## Additional Resources
+```ts
+export const environment = { tmdb: 'YOUR_TMDB_API_KEY' };
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Then:
+
+```bash
+npm start        # dev server at http://localhost:4200
+npm test         # unit tests (Vitest)
+npm run build    # production build to dist/
+```
+
+## Project structure
+
+```
+src/app/
+├── app.routes.ts        # lazy-loaded routes
+├── movie.service.ts     # TMDB HTTP calls
+├── movie.ts             # domain + TMDB API types
+├── watchlist/           # watchlist with watched toggling
+├── search/              # trending movies grid
+└── movie-detail/        # full details for one movie (/movie/:id)
+```
+
+## Roadmap
+
+This project is being built in phases:
+
+- [x] **Phase 1**: Watchlist with signals, routing, TMDB trending, and movie details
+- [ ] **Next phases**: remaining features in progress
+
+## Notes
+
+- The TMDB key is used in the browser. That's fine for a demo, but a production app would send requests through a backend so the key stays private.
+- This product uses the TMDB API but is not endorsed or certified by TMDB.
