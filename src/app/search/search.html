@@ -1,0 +1,8 @@
+@for(movie of movies(); track movie.id){
+    <a [routerLink]="['/movie', movie.id]">
+        @if(movie.poster_path){
+            <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" alt="{{ movie.title }}">
+        }
+        <p>{{ movie.title }} ({{ movie.release_date }})</p>
+    </a>
+}

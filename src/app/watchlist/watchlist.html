@@ -1,0 +1,17 @@
+<div class="container watchlist-container">
+    <h2>My Watchlist 🍿 ({{watchedCount()}} watched)</h2>
+    
+    @if (movies().length === 0) {
+        <p>No movies in your watchlist.</p>
+    }
+    <div class="watchlist-items-container">
+        @for (movie of movies(); track movie.id){
+            <div tabindex="0" class="watchlist-item" aria-role="button" (keypress)="toggleWatched($event, movie.id)" (click)="toggleWatched($event, movie.id)" aria-label="Toggle watched status" aria-checked="{{movie.watched}}">
+                <div><strong>{{movie.title}}</strong></div> 
+                <div>({{movie.releaseDate}})</div>
+                <div>Rating: {{movie.rating}}</div>
+                <div>{{movie.watched ? '✅' : '⬜️'}}</div>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,29 @@
+.watchlist-item {
+  cursor: pointer;
+  padding: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 4px;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  &:hover {
+    background-color: #f0f0f0;
+    transition: background-color 0.6s;
+  }
+  
+}
+
+.watchlist-items-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;
+}
+
+.watchlist-container { 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
