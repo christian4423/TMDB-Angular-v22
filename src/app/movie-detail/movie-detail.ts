@@ -1,5 +1,6 @@
-import { Component, computed, Inject, inject } from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MovieService } from '../movie.service';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -17,6 +18,7 @@ import { WatchlistStore } from '../watchlist-store';
 export class MovieDetail {
   private route = inject(ActivatedRoute);
   private movieService = inject(MovieService);
+  private title = inject(Title);
 
   readonly imageBase = 'https://image.tmdb.org/t/p';
   store = inject(WatchlistStore)
@@ -39,6 +41,16 @@ export class MovieDetail {
     const m = minutes % 60;
     return h ? `${h} hr ${m} min` : `${m} min`;
   });
+
+  constructor() {
+    // Give each movie its own document title so screen reader users and browser tabs know where they are
+    effect(() => {
+      const m = this.movie();
+      if (m) {
+        this.title.setTitle(`${m.title} | Watchlist`);
+      }
+    });
+  }
 
   topCast = computed(() => this.movie()?.credits?.cast.slice(0, 8) ?? []);
   onList = computed(() => this.store.items().some(m => m.id === this.movie()?.id));

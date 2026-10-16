@@ -4,7 +4,10 @@ import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { MovieDetail } from './movie-detail';
 import { MovieService } from '../movie.service';
+import { Title } from '@angular/platform-browser';
 import { TmdbMovieDetail } from '../movie';
+import { WatchlistStore } from '../watchlist-store';
+import { expectNoA11yViolations } from '../../testing/axe';
 
 const mockMovie: TmdbMovieDetail = {
   id: 42,
@@ -27,6 +30,7 @@ const mockMovie: TmdbMovieDetail = {
 };
 
 async function setup(getMovie: () => unknown) {
+  localStorage.clear();
   await TestBed.configureTestingModule({
     imports: [MovieDetail],
     providers: [
@@ -63,5 +67,31 @@ describe('MovieDetail', () => {
   it('shows an alert when the movie fails to load', async () => {
     const { el } = await setup(() => throwError(() => new Error('network')));
     expect(el.querySelector('[role="alert"]')?.textContent).toContain("couldn't load");
+  });
+
+  it('sets the document title to the movie name', async () => {
+    await setup(() => of(mockMovie));
+    expect(TestBed.inject(Title).getTitle()).toBe('Test Movie | Watchlist');
+  });
+
+  it('adds and removes the movie from the watchlist', async () => {
+    const { fixture, el } = await setup(() => of(mockMovie));
+    const store = TestBed.inject(WatchlistStore);
+    const button = () => el.querySelector<HTMLButtonElement>('.watchlist-toggle')!;
+
+    expect(button().textContent).toContain('Add to watchlist');
+    button().click();
+    await fixture.whenStable();
+    expect(store.items().map(m => m.id)).toEqual([42]);
+    expect(button().textContent).toContain('On your watchlist');
+
+    button().click();
+    await fixture.whenStable();
+    expect(store.items()).toEqual([]);
+  });
+
+  it('has no axe accessibility violations', async () => {
+    const { el } = await setup(() => of(mockMovie));
+    await expectNoA11yViolations(el);
   });
 });

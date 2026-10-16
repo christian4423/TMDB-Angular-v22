@@ -1,5 +1,5 @@
-<div class="container detail-container">
-    <a routerLink="/search" class="back-link">← Back to search</a>
+<div class="container">
+    <a routerLink="/search" class="back-link"><span aria-hidden="true">←</span> Back to search</a>
 
     @if (movie(); as m) {
         <article class="movie-detail" aria-labelledby="movie-title">
@@ -25,11 +25,11 @@
                         <p class="tagline">{{ m.tagline }}</p>
                     }
 
-                    <button type="button" class="watchlist-toggle" (click)="toggleList()" [attr.aria-pressed]="onList()">
+                    <button type="button" class="btn watchlist-toggle" [class.btn-primary]="!onList()" (click)="toggleList()">
                         @if (onList()) {
-                            remove from watchlist ✖️
+                            <span aria-hidden="true">✓</span> On your watchlist<span class="visually-hidden">, remove</span>
                         } @else {
-                            + add to watchlist 🍿
+                            <span aria-hidden="true">+</span> Add to watchlist
                         }
                     </button>
 
@@ -108,8 +108,8 @@
             }
         </article>
     } @else if (movie() === null) {
-        <p role="alert">Sorry, we couldn't load this movie. Please try again later.</p>
+        <p class="empty-state" role="alert">Sorry, we couldn't load this movie. Please try again later.</p>
     } @else {
-        <p role="status">Loading movie…</p>
+        <p class="loading" role="status">Loading movie…</p>
     }
 </div>

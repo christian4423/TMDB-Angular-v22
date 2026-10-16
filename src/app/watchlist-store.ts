@@ -1,4 +1,4 @@
-import { computed, effect, Injectable, Service, signal } from '@angular/core';
+import { computed, effect, Injectable, signal } from '@angular/core';
 import { TmdbMovie, WatchItem } from './movie';
 
 @Injectable({ providedIn: 'root' })
@@ -21,7 +21,7 @@ export class WatchlistStore {
 
     add(movie: TmdbMovie) {
         this._items.update(items =>
-            items.some(m => m.id === movie.id) ? items : [...items, { id: movie.id, title: movie.title, watched: false }]
+            items.some(m => m.id === movie.id) ? items : [...items, { id: movie.id, title: movie.title, poster_path: movie.poster_path, release_date: movie.release_date, watched: false }]
         );
     }
 

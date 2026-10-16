@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { WatchlistStore } from './watchlist-store';
 
 @Component({
   imports: [RouterOutlet, RouterLink, RouterLinkActive],
@@ -8,5 +9,12 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
   templateUrl: './app.html',
 })
 export class App {
-  protected readonly title = signal('watchlist');
+  protected readonly store = inject(WatchlistStore);
+
+  // A plain href="#main" would resolve against <base href> and trigger a navigation,
+  // so move focus to <main> manually instead.
+  skipToMain(event: Event) {
+    event.preventDefault();
+    document.getElementById('main')?.focus();
+  }
 }

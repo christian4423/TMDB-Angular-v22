@@ -45,4 +45,7 @@ export interface WatchItem {
     id: number;
     title: string;
     watched: boolean;
+    // Optional so items saved before these fields existed still load
+    poster_path?: string | null;
+    release_date?: string;
 }
