@@ -6,11 +6,11 @@
     }
     <div class="watchlist-items-container">
         @for (movie of movies(); track movie.id){
-            <div tabindex="0" class="watchlist-item" role="checkbox" (keydown)="toggleWatched($event, movie.id)" (click)="toggleWatched($event, movie.id)" [attr.aria-label]="'Watched: ' + movie.title" [attr.aria-checked]="movie.watched">
-                <div><strong>{{movie.title}}</strong></div> 
-                <div>({{movie.releaseDate}})</div>
-                <div>Rating: {{movie.rating}}</div>
-                <div aria-hidden="true">{{movie.watched ? '✅' : '⬜️'}}</div>
+            <div class="watchlist-item">
+                <a [routerLink]="['/movie', movie.id]" class="watchlist-item-title"><strong>{{movie.title}}</strong></a>
+                <button type="button" class="watched-toggle" role="checkbox" [attr.aria-checked]="movie.watched" [attr.aria-label]="'Watched: ' + movie.title" (click)="toggleWatched(movie.id)">
+                    <span aria-hidden="true">{{movie.watched ? '✅' : '⬜️'}}</span>
+                </button>
             </div>
         }
     </div>

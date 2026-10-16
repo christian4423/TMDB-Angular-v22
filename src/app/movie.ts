@@ -40,3 +40,9 @@ export interface TmdbMovieDetail extends TmdbMovie {
     homepage: string;
     credits?: { cast: TmdbCastMember[] };
 }
+
+export interface WatchItem {
+    id: number;
+    title: string;
+    watched: boolean;
+}

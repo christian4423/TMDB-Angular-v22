@@ -1,8 +1,17 @@
-@for(movie of movies(); track movie.id){
+<div class="container search-container">
+    <form>
+        <input type="search" [formControl]="searchControl" />
+    </form>
+
+    @for(movie of movies(); track movie.id){
     <a [routerLink]="['/movie', movie.id]">
         @if(movie.poster_path){
-            <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" alt="{{ movie.title }}">
+        <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" alt="{{ movie.title }}">
         }
         <p>{{ movie.title }} ({{ movie.release_date }})</p>
     </a>
-}
+    <button (click)="store.add(movie)" [attr.aria-label]="'add ' + movie.title + ' to watchlist'">
+        @if (store.items().some(m => m.id === movie.id)) { ✅ } @else { + 🍿 }
+    </button>
+    }
+</div>

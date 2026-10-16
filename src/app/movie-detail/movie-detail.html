@@ -25,6 +25,14 @@
                         <p class="tagline">{{ m.tagline }}</p>
                     }
 
+                    <button type="button" class="watchlist-toggle" (click)="toggleList()" [attr.aria-pressed]="onList()">
+                        @if (onList()) {
+                            remove from watchlist ✖️
+                        } @else {
+                            + add to watchlist 🍿
+                        }
+                    </button>
+
                     <ul class="facts" aria-label="Quick facts">
                         @if (m.release_date) {
                             <li>Released {{ m.release_date }}</li>

@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, Inject, inject } from '@angular/core';
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MovieService } from '../movie.service';
@@ -6,6 +6,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { TmdbMovieDetail } from '../movie';
+import { WatchlistStore } from '../watchlist-store';
 
 @Component({
   imports: [RouterLink, DecimalPipe, CurrencyPipe],
@@ -18,7 +19,7 @@ export class MovieDetail {
   private movieService = inject(MovieService);
 
   readonly imageBase = 'https://image.tmdb.org/t/p';
-
+  store = inject(WatchlistStore)
   // undefined = loading, null = failed to load
   movie = toSignal<TmdbMovieDetail | null>(
     this.route.paramMap.pipe(
@@ -40,7 +41,14 @@ export class MovieDetail {
   });
 
   topCast = computed(() => this.movie()?.credits?.cast.slice(0, 8) ?? []);
+  onList = computed(() => this.store.items().some(m => m.id === this.movie()?.id));
 
+  toggleList() {
+    const m = this.movie();
+    if (!m) return;
+    this.onList() ? this.store.remove(m.id) : this.store.add(m);
+  }
+  
   language = computed(() => {
     const code = this.movie()?.original_language;
     if (!code) {

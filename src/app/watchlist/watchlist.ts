@@ -1,32 +1,20 @@
-import { Component } from '@angular/core';
-import { signal, computed } from '@angular/core';
-import { Movie } from '../movie';
+import { Component, inject, computed } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { Movie, TmdbMovie, WatchItem } from '../movie';
+import { WatchlistStore } from '../watchlist-store';
 
 @Component({
-  imports: [],
+  imports: [RouterLink],
   selector: 'app-watchlist',
   styleUrl: './watchlist.scss',
   templateUrl: './watchlist.html',
 })
 export class Watchlist {
-   movies = signal<Movie[]>([
-     {id: 1, title: 'Movie 1', releaseDate: '2024-01-01', rating: 5, watched: false},
-     {id: 2, title: 'Movie 2', releaseDate: '2024-02-01', rating: 4, watched: true},
-     {id: 3, title: 'Movie 3', releaseDate: '2024-03-01', rating: 3, watched: false}
-  ])
+  store = inject(WatchlistStore)
+  movies = this.store.items
 
   watchedCount = computed(() => this.movies().filter(movie => movie.watched).length)
-
-  toggleWatched(event: KeyboardEvent | MouseEvent, id: number) {
-    if (event instanceof KeyboardEvent) {
-      if (event.key !== 'Enter' && event.key !== ' ') {
-        return;
-      }
-      // Stop Space from scrolling the page
-      event.preventDefault();
-    }
-    this.movies.update(movies => 
-      movies.map(movie => movie.id === id ? {...movie, watched: !movie.watched} : movie)
-    );
+  toggleWatched(id: number) {
+    this.store.toggleWatched(id)
   }
 }
