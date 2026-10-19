@@ -10,6 +10,22 @@ A small movie watchlist app built on [The Movie Database (TMDB) API](https://dev
 - **Navigation**: a sticky header with the current page highlighted and a badge showing how many movies are on your list.
 - **Theming**: CSS custom-property design tokens with automatic light and dark mode.
 
+## Screenshots
+
+### Watchlist
+
+| Empty | With movies |
+| --- | --- |
+| ![Empty watchlist page showing "Your watchlist is empty." and a "Find movies to add" button](samples/watchlist-home-empty.webp) | ![Watchlist with two movies, one checked off as watched, and a progress bar reading "1 of 2 watched"](samples/watchlist-home-list.webp) |
+
+### Search
+
+![Find movies page with a search box and a grid of this week's trending movies, each with an Add button](samples/watchlist-search.webp)
+
+### Movie details
+
+![Details page for Spider-Man: Brand New Day showing the backdrop, poster, tagline, rating, genres, overview, budget and revenue, and top-billed cast](samples/watchlist-details.webp)
+
 ## Angular concepts used
 
 | Concept | Where |
