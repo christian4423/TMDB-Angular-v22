@@ -97,7 +97,7 @@ src/testing/axe.ts       # shared axe-core accessibility assertion for specs
 This project is being built in phases:
 
 - [x] **Phase 1**: Watchlist with signals, routing, TMDB trending, and movie details
-- [ ] **Next phases**: remaining features in progress
+- [x] **Next phases**: remaining features in progress
 
 ## Notes
 
